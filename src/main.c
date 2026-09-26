@@ -94,8 +94,7 @@ int lerTentativasEntregas(void) {
 int lerContinuar(void){
     int Continuar;
 
-    do
-    {
+    do{
         printf("\nDeseja Processar Outra Entrega ?\n");
         printf("1 - SIM\n");
         printf("0 - NÃO\n");
@@ -106,7 +105,7 @@ int lerContinuar(void){
             printf("Opcção Invalida!\n");
         }
         
-    } while (Continuar != 0 && Continuar != 1);
+    }while (Continuar != 0 && Continuar != 1);
 
     return Continuar;
 
@@ -193,6 +192,10 @@ float CalcularAdicionalTentativas(int TentativasEntregas) {
 
 int main(void) {
     int ModalidadeEntrega, Protecao, TentativasEntregas, Continuar;
+    int TotalEntregas = 0;
+    int QuantidadeEconomica = 0;
+    int QuantidadeExpressa = 0;
+    int QuantidadePrioritaria = 0;
     float Distancia, Peso;
     float SubTotalInicial;
     float ValorAdicionalPeso;
@@ -200,33 +203,79 @@ int main(void) {
     float ValorAdicionalProtecao;
     float ValorAdicionalTentativas;
     float ValorFinal;
+    float ValorTotal = 0;
+    float MaiorValor = 0;
+    float MenorValor = 0;
+    float ValorMedio;
 
     printf("=== SIMULADOR DE ENTREGAS ===\n");
 
-    Distancia = lerDistancia();
-    Peso = lerPeso();
-    ModalidadeEntrega = lerModalidadeEntrega();
-    Protecao = lerProtecao();
-    TentativasEntregas = lerTentativasEntregas();
+    do {
 
-    SubTotalInicial = CalcularSubTotalInicial(Distancia);
+        Distancia = lerDistancia();
+        Peso = lerPeso();
+        ModalidadeEntrega = lerModalidadeEntrega();
+        Protecao = lerProtecao();
+        TentativasEntregas = lerTentativasEntregas();
 
-    ValorAdicionalPeso = CalcularAdicionalPeso(Peso, SubTotalInicial);
+        SubTotalInicial = CalcularSubTotalInicial(Distancia);
 
-    ValorAdicionalModalidade = CalcularAdicionalModalidade(ModalidadeEntrega, SubTotalInicial);
+        ValorAdicionalPeso = CalcularAdicionalPeso(Peso, SubTotalInicial);
 
-    ValorAdicionalProtecao = CalcularAdicionalProtecao(Protecao);
+        ValorAdicionalModalidade = CalcularAdicionalModalidade(ModalidadeEntrega, SubTotalInicial);
 
-    ValorAdicionalTentativas = CalcularAdicionalTentativas(TentativasEntregas);
+        ValorAdicionalProtecao = CalcularAdicionalProtecao(Protecao);
 
-    ValorFinal =
-        SubTotalInicial
+        ValorAdicionalTentativas = CalcularAdicionalTentativas(TentativasEntregas);
+
+        ValorFinal = SubTotalInicial
         + ValorAdicionalPeso
         + ValorAdicionalModalidade
         + ValorAdicionalProtecao
         + ValorAdicionalTentativas;
 
-    printf("\nValor final da entrega: R$ %.2f\n", ValorFinal);
+        printf("\nValor final da entrega: R$ %.2f\n", ValorFinal);
+        
+        TotalEntregas++;
+        ValorTotal += ValorFinal;
+
+        if (ModalidadeEntrega == 1){
+            QuantidadeEconomica ++;
+        }else if (ModalidadeEntrega == 2){
+            QuantidadeExpressa ++;
+        }else{
+            QuantidadePrioritaria ++;
+        }
+        
+        if (TotalEntregas == 1){
+    MaiorValor = ValorFinal;
+    MenorValor = ValorFinal;
+}else{
+    if (ValorFinal > MaiorValor){
+        MaiorValor = ValorFinal;
+    }
+
+    if (ValorFinal < MenorValor){
+        MenorValor = ValorFinal;
+    }
+}
+
+        Continuar = lerContinuar();
+
+    } while (Continuar == 1);
+
+    ValorMedio = ValorTotal / TotalEntregas;
+
+    printf("\n=== RESUMO FINAL ===\n");
+    printf("Total de entregas processadas: %d\n", TotalEntregas);
+    printf("Valor total da sessao: R$ %.2f\n", ValorTotal);
+    printf("Valor medio das entregas: R$ %.2f\n", ValorMedio);
+    printf("Quantidade de entregas Economicas: %d\n", QuantidadeEconomica);
+    printf("Quantidade de entregas Expressas: %d\n", QuantidadeExpressa);
+    printf("Quantidade de entregas Prioritarias: %d\n", QuantidadePrioritaria);
+    printf("Maior valor de entrega: R$ %.2f\n", MaiorValor);
+    printf("Menor valor de entrega: R$ %.2f\n", MenorValor);
+
 
     return 0;
 }
