@@ -91,6 +91,27 @@ int lerTentativasEntregas(void) {
     return TentativasEntregas;
 }
 
+int lerContinuar(void){
+    int Continuar;
+
+    do
+    {
+        printf("\nDeseja Processar Outra Entrega ?\n");
+        printf("1 - SIM\n");
+        printf("0 - NÃO\n");
+        printf("Escolha: ");
+        scanf("%d", &Continuar);
+
+        if (Continuar != 0 && Continuar != 1){
+            printf("Opcção Invalida!\n");
+        }
+        
+    } while (Continuar != 0 && Continuar != 1);
+
+    return Continuar;
+
+}
+
 // CALCULOS
 
 float CalcularValorBase(float Distancia) {
@@ -171,7 +192,7 @@ float CalcularAdicionalTentativas(int TentativasEntregas) {
 }
 
 int main(void) {
-    int ModalidadeEntrega, Protecao, TentativasEntregas;
+    int ModalidadeEntrega, Protecao, TentativasEntregas, Continuar;
     float Distancia, Peso;
     float SubTotalInicial;
     float ValorAdicionalPeso;
